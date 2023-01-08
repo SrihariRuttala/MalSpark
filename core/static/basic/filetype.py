@@ -24,4 +24,3 @@ class filetype:
     
 obj = filetype()
 l = obj.detect_filetype()
-print(l)

@@ -1,6 +1,8 @@
 import hashlib
 import ssdeep
 from filetype import GLOBAL
+import pefile
+import pyimpfuzzy
 
 class hashes:
     
@@ -27,6 +29,16 @@ class hashes:
     def get_ssdeep(self):
         ssdeep_hash = ssdeep.hash_from_file(self.file)
         return ssdeep_hash
+
+    def get_imphash(self):
+        pefile_obj = pefile.PE(self.file)
+        imphash = pefile_obj.get_imphash()
+        return imphash
+
+    def get_impfuzzy(self):
+        impfuzzy_hash = pyimpfuzzy.get_impfuzzy(self.file)
+        return impfuzzy_hash
+
     
 obj = hashes()
 print(obj.get_md5())
@@ -34,4 +46,6 @@ print(obj.get_sha1())
 print(obj.get_sha256())
 print(obj.get_sha512())
 print(obj.get_ssdeep())
+print(obj.get_imphash())
+print(obj.get_impfuzzy())
     
