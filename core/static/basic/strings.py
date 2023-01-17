@@ -45,10 +45,10 @@ class strings:
 		if type == 'files':
 			for i in words:
 				for j in self.collected:
-					if (i in j.strip().lower()) and (j.split(".")[0].lower() not in list(map(str.lower, self.mal_strings['utils']['util']))):
+					if (i in j.strip().lower()) and (j.split(".")[0].lower() not in list(map(str.lower, self.mal_strings['utilities']['util']))):
 						category_string.append(j)
 						self.collected.remove(j)
-		elif type== 'utils':
+		elif type== 'utilities':
 			for i in words:
 				for j in self.collected:
 					if (i.lower() == j.strip().lower()) or (j.split(".")[0].lower() == i.lower()):
@@ -78,7 +78,9 @@ class strings:
 			pattern_list = self.pattern_category(mal_types[i], self.mal_strings[mal_types[i]][sub_type[i]])
 			patterns.append(pattern_list)
 
-		print(patterns)
+		for i in mal_types:
+			print(i)
+		# print(patterns)
 		
 
 obj = strings()
