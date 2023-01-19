@@ -10,7 +10,7 @@ class strings:
 	
 	def __init__(self):
 		self.mal_strings = json.load(open(os.getcwd() + '/../../../json/strings.json','r'))
-		self.file = "/home/srihari/Documents/projects/malspark/samples/Danger/cobal"
+		self.file = "/home/srihari/Documents/projects/malspark/samples/Chapter_3L/Lab03-04.exe"
 		self.printable = set(string.printable)
 		self.data = open(self.file, 'rb').read()
 		self.collected = []
@@ -18,10 +18,40 @@ class strings:
 
 	def advanced_strings(self):
 		url_pattern = re.compile(r'(http[s]?://)?(www\.)[a-zA-Z0-9-_]+(\.[a-zA-Z0-9-_]+)+(:[0-9]+)?(/.*)*')
+		
+		ipv4_pattern = re.compile(r'\b(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b')
+		
+		ipv6_regex = '''(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|
+        ([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:)
+        {1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1
+        ,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}
+        :){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{
+        1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA
+        -F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a
+        -fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0
+        -9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,
+        4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}
+        :){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9
+        ])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0
+        -9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]
+        |1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]
+        |1{0,1}[0-9]){0,1}[0-9]))'''
+
+		email_pattern = re.compile(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b')
+		
 		for i in self.collected:
 			match = url_pattern.search(i)
+			ipv4_match = ipv4_pattern.search(i)
+			ipv6_match = re.search(ipv6_regex, i)
+			email_match = email_pattern.search(i)
 			if match:
 				print(match.group())
+			if ipv4_match:
+				print(ipv4_match.group())
+			if ipv6_match:
+				print(ipv6_match.group())
+			if email_match:
+				print(email_match.group())
 
 	def extract_strings(self):
 		# print(self.data)
