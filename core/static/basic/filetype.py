@@ -1,11 +1,15 @@
 import magic
 import os
 import json
+import pefile
 
 global GLOBAL
 GLOBAL = json.load(open(os.getcwd() + '/../../../config/config.json','r'))
 
 class filetype:
+    def __init__(self):
+        self.pe = pefile.PE('/home/srihari/Documents/projects/malspark/samples/Chapter_3L/Lab03-01.exe')
+
     def detect_filetype(self):
         files = os.listdir(GLOBAL["paths"]["samples"])
         file = files[0]
@@ -21,6 +25,16 @@ class filetype:
                     return "DLL", "GUI"
         
         return file, "unsupported"
+
+    def detect_compiler(self):
+        for key in self.pe.__dict__.keys():
+            print(key)
+        if hasattr(self.pe, 'VS_FIXEDFILEINFO'):
+            print("Compiler:", pe.VS_FIXEDFILEINFO.CompanyName.decode())
+            print("Product version:", pe.VS_FIXEDFILEINFO.ProductVersion)
+        else:
+            print("not attr")
     
 obj = filetype()
-l = obj.detect_filetype()
+# l = obj.detect_filetype()
+obj.detect_compiler()
