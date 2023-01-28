@@ -35,6 +35,6 @@ class filetype:
         else:
             print("not attr")
     
-obj = filetype()
+# obj = filetype()
 # l = obj.detect_filetype()
-obj.detect_compiler()
+# obj.detect_compiler()
