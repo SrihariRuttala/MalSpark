@@ -3,9 +3,9 @@ from hashlib import md5
 import os
 
 class pesection:
-    def __init__(self):
-        self.pe = pefile.PE('/home/srihari/Documents/projects/malspark/samples/Chapter_3L/Lab03-03.exe')
-        self.size = os.path.getsize('/home/srihari/Documents/projects/malspark/samples/Chapter_3L/Lab03-03.exe')
+    def __init__(self, file_path):
+        self.pe = pefile.PE(file_path)
+        self.size = os.path.getsize(file_path)
 
     def parse_pe(self):
         section_list = []
@@ -33,6 +33,6 @@ class pesection:
         else:
             return "Unknown"
 
-pe = pesection()
+pe = pesection('/home/srihari/Documents/projects/malspark/samples/upx_ADExplorer.exe')
 print(pe.parse_pe())
 print(pe.get_subsystem())

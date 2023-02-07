@@ -2,6 +2,7 @@ import requests
 import json
 from html2image import Html2Image 
 import sys
+import socket
 
 sys.path.append('../../../')
 
@@ -14,8 +15,7 @@ class virustotal:
 
 	def search(self):
 		token_url = "https://www.virustotal.com/api/v3/widget/url?query=" + str(self.hash)
-		
-		print(self.apikey)
+
 		header = {
 			"accept": "application/json",
 			"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.5359.125 Safari/537.36",
@@ -25,13 +25,27 @@ class virustotal:
 		response = requests.get(token_url, headers=header)
 		json_response = json.loads(response.text)
 		token = json_response["data"]["url"].split("html/")[1]
-		
+
 		widget_url = "https://www.virustotal.com/ui/widget/html/" + str(token)
 		response = requests.get(widget_url, headers=header)
 
 		hti = Html2Image()
 		hti.screenshot(html_str=response.text, save_as='virustotal.png')
 
+	def check_connection(self):
+		try:
+			host = socket.gethostbyname("one.one.one.one")
+			s = socket.create_connection((host, 80), 2)
+			s.close()
+			return True
+		except:
+			pass
+		return False
+
 
 obj = virustotal()
-obj.search()
+# obj.search()
+if (obj.check_connection()):
+	print("Connected")
+else:
+	print("Not Connected")
