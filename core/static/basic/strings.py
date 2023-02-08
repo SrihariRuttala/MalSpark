@@ -15,6 +15,7 @@ class strings:
 		self.data = open(self.file, 'rb').read()
 		self.collected = []
 		self.executor = ThreadPoolExecutor(10)
+		self.min_length = GLOBAL["static"]["basic"]["minimum_string_length"]
 
 	def advanced_strings(self):
 		url_pattern = re.compile(r'(http[s]?://)?(www\.)[a-zA-Z0-9-_]+(\.[a-zA-Z0-9-_]+)+(:[0-9]+)?(/.*)*')
@@ -68,7 +69,7 @@ class strings:
 				else:
 					extracted_string += char
 					flag =1
-			elif len(extracted_string) >=4:
+			elif len(extracted_string) >= self.min_length:
 				self.collected.append(extracted_string)
 				extracted_string = ""
 				flag = 0

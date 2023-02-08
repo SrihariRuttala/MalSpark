@@ -5,6 +5,7 @@ import sys
 sys.path.append('../../../')
 
 from core.static.basic.modules import modules
+from core.static.basic.filetype import GLOBAL
 
 class packer:
 
@@ -12,6 +13,7 @@ class packer:
         self.pe = pefile.PE('/home/srihari/Documents/projects/malspark/samples/upx_ADExplorer.exe')
         self.rules = yara.compile('/home/srihari/Documents/projects/malspark/yara/packers.yara')
         self.file_path = file_path
+        self.threshold = GLOBAL["static"]["advanced"]["imports_threshold"]
 
     def detect_yara_rules(self):
         matches = self.rules.match(self.file_path)

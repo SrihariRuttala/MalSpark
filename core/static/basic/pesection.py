@@ -8,7 +8,7 @@ class pesection:
         self.size = os.path.getsize(file_path)
 
     def parse_pe(self):
-        section_list = []
+        section_dict = {}
         for section in self.pe.sections:
             Name = section.Name.decode()
             VirtualAddress = hex(section.VirtualAddress)
@@ -18,9 +18,9 @@ class pesection:
             Entropy = section.get_entropy()
             Ratio = (section.SizeOfRawData / self.size) * 100
             # print("Ratio: {:.2f}%".format(Ratio))
-            section = [Name, VirtualAddress, VirtualSize, RawAddress, RawDataSize, Entropy, Ratio]
-            section_list.append(section)
-        return section_list
+            section = [VirtualAddress, VirtualSize, RawAddress, RawDataSize, Entropy, Ratio]
+            section_dict[Name] = section
+        return section_dict
 
     def get_subsystem(self):
         subsystem = self.pe.OPTIONAL_HEADER.Subsystem

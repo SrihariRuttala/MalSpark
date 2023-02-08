@@ -8,7 +8,8 @@
             "minimum_string_length": 4
         },
         "advanced":{
-            "vt_apikey": ""
+            "vt_apikey": "",
+            "imports_threshold": 10
         }
     }
 }

@@ -3,7 +3,7 @@ import os
 import matplotlib.pyplot as plt
 
 
-class modules:
+class test:
     def __init__(self):
         self.path = "/home/srihari/Documents/projects/malware_stats/outliers/packed/"
         # self.pe = pefile.PE('/home/srihari/Documents/projects/malspark/samples/upx_ADExplorer.exe')
@@ -64,5 +64,5 @@ class modules:
         plt.show()
         # return imports_dict
 
-obj = modules()
+obj = test()
 obj.get_imports()
