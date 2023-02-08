@@ -5,16 +5,16 @@ import matplotlib.pyplot as plt
 
 class test:
     def __init__(self):
-        self.path = "/home/srihari/Documents/projects/malware_stats/outliers/packed/"
+        self.path = "/home/srihari/Documents/projects/malware_stats/packed/"
+        self.files = os.listdir(self.path)
         # self.pe = pefile.PE('/home/srihari/Documents/projects/malspark/samples/upx_ADExplorer.exe')
 
     def get_imports(self):
         imports_dict = {}
-        files = os.listdir(self.path)
         f = []
         imports_count = []
         imports_c = {}
-        for i in files:
+        for i in self.files:
             try:
                 self.pe = pefile.PE(self.path + str(i)) 
                 count = 0
@@ -64,5 +64,26 @@ class test:
         plt.show()
         # return imports_dict
 
+    def sections(self):
+        predefined_sections =  ['.text', '.bss', '.rdata', '.data', '.rsrc', '.edata', '.pdata', '.debug', '.idata', '.reloc', '.CRT', '.tls', '/4']
+        stats_dict = {}
+        for i in self.files:
+            sections = []
+            pe_file = pefile.PE(self.path + i)
+            for section in pe_file.sections:
+                section_name = section.Name.decode('ISO-8859-1').split('\x00')[0]
+                if section_name not in predefined_sections:
+                    sections.append(section_name)
+            if len(sections) != 0:
+                stats_dict[i] = sections
+                print(f'{i:<35} : {",".join(str(x) for x in stats_dict[i])}')
+
+        print(len(self.files))
+        print(len(list(stats_dict)))
+        # for i in stats_dict:
+        #     print(f'{i:<10} : {stats_dict[i]}')
+
+ 
+
 obj = test()
-obj.get_imports()
+obj.sections()
