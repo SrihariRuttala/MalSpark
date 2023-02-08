@@ -50,7 +50,22 @@ class packer:
 
         return packed
 
-    # def abnormal_sections(self):
+    def abnormal_section_names(self):
+        predefined_sections =  ['.text', '.bss', '.rdata', '.data', '.rsrc', '.edata', '.pdata', '.debug', '.idata', '.reloc', '.CRT', '.tls', '/4']
+        sections = []
+
+        for section in self.pe.sections:
+            section_name = section.Name.decode('ISO-8859-1').split('\x00')[0]
+            if section_name not in predefined_sections:
+                sections.append(section_name)
+
+        if len(sections) != 0:
+            return True, sections
+
+        return False, sections
+                
+
+    # def abnormal_section_size(self):
 
 
 obj = packer('/home/srihari/Documents/projects/malspark/samples/upx_ADExplorer.exe')
@@ -58,3 +73,4 @@ packers = obj.detect_yara_rules()
 print(list(packers))
 print(obj.min_imports_stats())
 print(obj.check_imports())
+print(obj.abnormal_section_names())
