@@ -9,7 +9,9 @@
         },
         "advanced":{
             "vt_apikey": "",
-            "imports_threshold": 10
+            "imports_threshold": 10,
+            "min_entropy": 6.677,  // based on https://ieeexplore.ieee.org/document/4140989
+            "max_entropy": 7.312
         }
     }
 }

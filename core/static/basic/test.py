@@ -3,7 +3,8 @@
 # re module provides support
 # for regular expressions
 import re
-
+import math
+import os
 # Make a regular expression
 # for validating an Ipv4
 ipv4 = '''^(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.(
@@ -43,17 +44,63 @@ def find(Ip):
 	else:
 		print("Neither")
 
+def entropy(filepath):
+    # Open the file and read its contents
+    with open(filepath, "rb") as f:
+        contents = f.read()
+
+    # Create a frequency dictionary for each byte value
+    frequency = {}
+    for b in contents:
+        if b in frequency:
+            frequency[b] += 1
+        else:
+            frequency[b] = 1
+
+    # Compute the entropy
+    entropy = 0
+    for b in frequency.values():
+        p = b / len(contents)
+        entropy -= p * math.log(p, 256)
+
+    return entropy
+
+def entropy1(filepath):
+
+	byte = [0 for i in range(256)]
+	with open(filepath, 'rb') as f:
+		data = f.read()
+		entropy = 0
+		for i in range(len(data)):
+			byte[data[i]] += 1
+
+		for i in range(256):
+			temp = byte[i]/len(data)
+			if temp:
+				entropy += (-math.log(temp)/math.log(2))* byte[i]
+
+		entropy = entropy/len(data)
+
+	print(entropy)
+
+	return entropy
+		
+
+
 # Driver Code
 if __name__ == '__main__' :
 	
-	# Enter the Ip address
-	Ip = "192.0.2.126"
+	# # Enter the Ip address
+	# Ip = "192.0.2.126"
 	
-	# calling run function
-	find(Ip)
+	# # calling run function
+	# find(Ip)
 
-	Ip = "3001:0da8:75a3:0000:0000:8a2e:0370:7334"
-	find(Ip)
+	# Ip = "3001:0da8:75a3:0000:0000:8a2e:0370:7334"
+	# find(Ip)
 
-	Ip = "36.12.08.20.52"
-	find(Ip)
+	# Ip = "36.12.08.20.52"
+	# find(Ip)
+	filepath = '/home/srihari/Documents/projects/malware_stats/not-packed/crop-auto.exe'
+	entropy_value = entropy1(filepath)
+	print("Entropy of {}: {} bits per byte".format(filepath, round(entropy_value, 5)))

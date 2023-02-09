@@ -1,6 +1,7 @@
 import yara
 import pefile
 import sys
+import math
 
 sys.path.append('../../../')
 
@@ -64,6 +65,25 @@ class packer:
 
         return False, sections
                 
+    def entropy(self):
+
+        # byte = [0 for i in range(256)]
+        byte = [0] * 256
+        with open(self.file_path, 'rb') as f:
+            data = f.read()
+            size = len(data)
+            entropy = 0
+            for i in range(size):
+                byte[data[i]] += 1
+
+            for i in range(256):
+                temp = byte[i]/size
+                if temp:
+                    entropy += (-math.log(temp)/math.log(2))* byte[i]
+
+            entropy = round(entropy/size, 5)
+
+        return entropy
 
     # def abnormal_section_size(self):
 
@@ -74,3 +94,4 @@ print(list(packers))
 print(obj.min_imports_stats())
 print(obj.check_imports())
 print(obj.abnormal_section_names())
+print(obj.entropy())
