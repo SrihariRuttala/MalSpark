@@ -15,6 +15,8 @@ class packer:
         self.rules = yara.compile('/home/srihari/Documents/projects/malspark/yara/packers.yara')
         self.file_path = file_path
         self.threshold = GLOBAL["static"]["advanced"]["imports_threshold"]
+        self.min_entropy = GLOBAL["static"]["advanced"]["min_entropy"]
+        self.max_entropy = GLOBAL["static"]["advanced"]["max_entropy"]
 
     def detect_yara_rules(self):
         matches = self.rules.match(self.file_path)
@@ -65,10 +67,12 @@ class packer:
 
         return False, sections
                 
-    def entropy(self):
+    def abnormal_entropy(self):
 
         # byte = [0 for i in range(256)]
         byte = [0] * 256
+        packed = False
+        encrypted = False
         with open(self.file_path, 'rb') as f:
             data = f.read()
             size = len(data)
@@ -83,15 +87,18 @@ class packer:
 
             entropy = round(entropy/size, 5)
 
-        return entropy
+        if entropy > self.min_entropy and entropy < self.max_entropy:
+            packed = True
+        elif entropy > self.max_entropy:
+            encrypted = True
 
-    # def abnormal_section_size(self):
-
+        return entropy, packed, encrypted
 
 obj = packer('/home/srihari/Documents/projects/malspark/samples/upx_ADExplorer.exe')
-packers = obj.detect_yara_rules()
-print(list(packers))
-print(obj.min_imports_stats())
-print(obj.check_imports())
-print(obj.abnormal_section_names())
-print(obj.entropy())
+# packers = obj.detect_yara_rules()
+# print(list(packers))
+# print(obj.min_imports_stats())
+# print(obj.check_imports())
+# print(obj.abnormal_section_names())
+# print(obj.abnormal_entropy())
+obj.abnormal_section_size()

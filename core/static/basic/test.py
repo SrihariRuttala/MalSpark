@@ -4,6 +4,7 @@
 # for regular expressions
 import re
 import math
+import pefile
 import os
 # Make a regular expression
 # for validating an Ipv4
@@ -67,23 +68,46 @@ def entropy(filepath):
 
 def entropy1(filepath):
 
-	byte = [0 for i in range(256)]
-	with open(filepath, 'rb') as f:
-		data = f.read()
-		entropy = 0
-		for i in range(len(data)):
-			byte[data[i]] += 1
+	for file in self.files:
+		filepath = self.path + file
+		byte = [0 for i in range(256)]
+		with open(filepath, 'rb') as f:
+			data = f.read()
+			entropy = 0
+			for i in range(len(data)):
+				byte[data[i]] += 1
 
-		for i in range(256):
-			temp = byte[i]/len(data)
-			if temp:
-				entropy += (-math.log(temp)/math.log(2))* byte[i]
+			for i in range(256):
+				temp = byte[i]/len(data)
+				if temp:
+					entropy += (-math.log(temp)/math.log(2))* byte[i]
 
-		entropy = entropy/len(data)
+			entropy = entropy/len(data)
 
-	print(entropy)
+		print(entropy)
 
-	return entropy
+		return entropy
+
+def get_stack_strings(file_path):
+    pe = pefile.PE(file_path)
+
+    # Get the address of the .rdata section
+    rdata_section = [section for section in pe.sections if section.Name.decode().strip() == '.rdata'][0]
+    rdata_offset = rdata_section.VirtualAddress
+    rdata_size = rdata_section.Misc_VirtualSize
+
+    # Read the .rdata section into memory
+    rdata = pe.get_memory_mapped_image()[rdata_offset:rdata_offset + rdata_size]
+
+    # Search for stack strings in the .rdata section
+    stack_strings = re.findall(b'[\x20-\x7E]+', rdata)
+
+    return stack_strings
+
+file_path = "path/to/your/pe_file.exe"
+stack_strings = get_stack_strings(file_path)
+print(stack_strings)
+
 		
 
 
@@ -103,4 +127,4 @@ if __name__ == '__main__' :
 	# find(Ip)
 	filepath = '/home/srihari/Documents/projects/malware_stats/not-packed/crop-auto.exe'
 	entropy_value = entropy1(filepath)
-	print("Entropy of {}: {} bits per byte".format(filepath, round(entropy_value, 5)))
+	print("Entropy of {}: {} bits per byte".format(filepath, round(entropy_value, 5))

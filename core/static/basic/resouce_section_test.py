@@ -1,13 +1,15 @@
 import pefile
+import traceback
 
 def get_resource_names(filepath):
     try:
         pe = pefile.PE(filepath)
         if not hasattr(pe, 'DIRECTORY_ENTRY_RESOURCE'):
+            print("hel")
             return None
         else:
             resource_names = []
-            for resource_type in pe.DIRECTORY_ENTRY_RESOURCE.entries:
+            for resource_type in pe.IMAGE_DIRECTORY_ENTRY_RESOURCE.entries:
                 if resource_type.name is not None:
                     resource_names.append(resource_type.name.decode())
                 else:
@@ -26,7 +28,7 @@ def get_resource_names(filepath):
         print(e)
         return None
 
-filepath = "/home/srihari/Documents/projects/malspark/samples/Chapter_3L/Lab03-03.exe"
+filepath = "/home/srihari/Documents/projects/malware_stats/Practical Malware Analysis Labs/BinaryCollection/Chapter_1L/Lab01-04.exe"
 resources_names = get_resource_names(filepath)
 if resources_names is None:
     print("The PE file does not have resources.")

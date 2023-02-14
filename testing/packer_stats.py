@@ -1,11 +1,12 @@
 import pefile
 import os
+import math
 import matplotlib.pyplot as plt
 
 
 class test:
     def __init__(self):
-        self.path = "/home/srihari/Documents/projects/malware_stats/packed/"
+        self.path = "/home/srihari/Documents/projects/malware_stats/not-packed/"
         self.files = os.listdir(self.path)
         # self.pe = pefile.PE('/home/srihari/Documents/projects/malspark/samples/upx_ADExplorer.exe')
 
@@ -83,7 +84,33 @@ class test:
         # for i in stats_dict:
         #     print(f'{i:<10} : {stats_dict[i]}')
 
+    def entropy(self):
+
+        entropy_list = []
+
+        for file in self.files:
+            filepath = self.path + file
+            byte = [0 for i in range(256)]
+            with open(filepath, 'rb') as f:
+                data = f.read()
+                entropy = 0
+                for i in range(len(data)):
+                    byte[data[i]] += 1
+
+                for i in range(256):
+                    temp = byte[i]/len(data)
+                    if temp:
+                        entropy += (-math.log(temp)/math.log(2))* byte[i]
+
+                entropy = entropy/len(data)
+            entropy_list.append(entropy)
+            # print(f' {file:<37} : {entropy}')
+
+        print(min(entropy_list))
+        print(max(entropy_list))
+        print(sum(entropy_list)/len(entropy_list))
+
  
 
 obj = test()
-obj.sections()
+obj.entropy()
