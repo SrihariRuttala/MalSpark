@@ -3,12 +3,13 @@ from hashlib import md5
 import os
 
 class pesection:
-    def __init__(self, file_path):
+    def __init__(self):
+        file_path = '/home/srihari/Documents/projects/malware_stats/Practical Malware Analysis Labs/BinaryCollection/Chapter_1L/Lab01-04.exe'
         self.pe = pefile.PE(file_path)
         self.size = os.path.getsize(file_path)
 
     def parse_pe(self):
-        section_dict = {}
+        section_data = []
         for section in self.pe.sections:
             Name = section.Name.decode()
             VirtualAddress = hex(section.VirtualAddress)
@@ -18,9 +19,10 @@ class pesection:
             Entropy = section.get_entropy()
             Ratio = (section.SizeOfRawData / self.size) * 100
             # print("Ratio: {:.2f}%".format(Ratio))
-            section = [VirtualAddress, VirtualSize, RawAddress, RawDataSize, Entropy, Ratio]
-            section_dict[Name] = section
-        return section_dict
+            section = [Name, VirtualAddress, VirtualSize, RawAddress, RawDataSize, Entropy, Ratio]
+            section_data.append(section)
+            # section_dict[Name] = section
+        return section_data
 
     def get_subsystem(self):
         subsystem = self.pe.OPTIONAL_HEADER.Subsystem
@@ -33,6 +35,6 @@ class pesection:
         else:
             return "Unknown"
 
-pe = pesection('/home/srihari/Documents/projects/malspark/samples/upx_ADExplorer.exe')
-print(pe.parse_pe())
-print(pe.get_subsystem())
+# pe = pesection('/home/srihari/Documents/projects/malspark/samples/upx_ADExplorer.exe')
+# print(pe.parse_pe())
+# print(pe.get_subsystem())

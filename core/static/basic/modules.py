@@ -2,6 +2,7 @@ import pefile
 
 class modules:
     def __init__(self, file_path):
+        # file_path = "/home/srihari/Documents/projects/malspark/samples/Chapter_3L/Lab03-04.exe"
         self.pe = pefile.PE(file_path)
 
     def get_imports(self):

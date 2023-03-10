@@ -1,6 +1,6 @@
 import hashlib
 import ssdeep
-from filetype import GLOBAL
+from core.static.basic.filetype import GLOBAL
 import pefile
 import pyimpfuzzy
 
@@ -39,13 +39,4 @@ class hashes:
         impfuzzy_hash = pyimpfuzzy.get_impfuzzy(self.file)
         return impfuzzy_hash
 
-    
-obj = hashes()
-print(obj.get_md5())
-print(obj.get_sha1())
-print(obj.get_sha256())
-print(obj.get_sha512())
-print(obj.get_ssdeep())
-print(obj.get_imphash())
-print(obj.get_impfuzzy())
     

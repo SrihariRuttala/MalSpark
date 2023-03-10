@@ -1,6 +1,7 @@
 {
     "paths" :{
-        "samples": "/home/srihari/Documents/projects/malspark/samples/Chapter_3L/"
+        "samples": "/home/srihari/Documents/projects/malspark/samples/Chapter_3L/",
+        "yara_rules": "/home/srihari/Documents/projects/malspark/yara/packers.yara"
     },
 
     "static" :{

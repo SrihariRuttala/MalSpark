@@ -2,17 +2,14 @@ import yara
 import pefile
 import sys
 import math
-
-sys.path.append('../../../')
-
 from core.static.basic.modules import modules
 from core.static.basic.filetype import GLOBAL
 
 class packer:
 
     def __init__(self, file_path):
-        self.pe = pefile.PE('/home/srihari/Documents/projects/malspark/samples/upx_ADExplorer.exe')
-        self.rules = yara.compile('/home/srihari/Documents/projects/malspark/yara/packers.yara')
+        self.pe = pefile.PE(file_path)
+        self.rules = yara.compile(GLOBAL["paths"]["yara_rules"])
         self.file_path = file_path
         self.threshold = GLOBAL["static"]["advanced"]["imports_threshold"]
         self.min_entropy = GLOBAL["static"]["advanced"]["min_entropy"]
@@ -95,10 +92,10 @@ class packer:
         return entropy, packed, encrypted
 
 obj = packer('/home/srihari/Documents/projects/malspark/samples/upx_ADExplorer.exe')
-# packers = obj.detect_yara_rules()
-# print(list(packers))
-# print(obj.min_imports_stats())
-# print(obj.check_imports())
-# print(obj.abnormal_section_names())
-# print(obj.abnormal_entropy())
+packers = obj.detect_yara_rules()
+print(list(packers))
+print(obj.min_imports_stats())
+print(obj.check_imports())
+print(obj.abnormal_section_names())
+print(obj.abnormal_entropy())
 obj.abnormal_section_size()

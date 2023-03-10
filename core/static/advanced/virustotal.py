@@ -44,8 +44,8 @@ class virustotal:
 
 
 obj = virustotal()
-# obj.search()
 if (obj.check_connection()):
 	print("Connected")
+	obj.search()
 else:
 	print("Not Connected")

@@ -2,12 +2,14 @@ import magic
 import os
 import json
 import pefile
+import subprocess
 
 global GLOBAL
-GLOBAL = json.load(open(os.getcwd() + '/../../../config/config.json','r'))
+GLOBAL = json.load(open(os.getcwd() + '/config/config.json','r'))
 
 class filetype:
     def __init__(self):
+        self.file_path = '/home/srihari/Documents/projects/malspark/samples/Chapter_3L/Lab03-01.exe'
         self.pe = pefile.PE('/home/srihari/Documents/projects/malspark/samples/Chapter_3L/Lab03-01.exe')
 
     def detect_filetype(self):
@@ -34,7 +36,14 @@ class filetype:
             print("Product version:", pe.VS_FIXEDFILEINFO.ProductVersion)
         else:
             print("not attr")
+
+    def get_fileinfo(self):
+        # output = subprocess.check_output(['nfdc', self.file_path]).decode().split('\n')
+
+        # return output
+        cmd = "nfdc " + self.file_path
+        os.system(cmd)
     
 # obj = filetype()
-# l = obj.detect_filetype()
+# # l = obj.detect_filetype()
 # obj.detect_compiler()

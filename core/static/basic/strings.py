@@ -1,15 +1,16 @@
 import string
-from filetype import GLOBAL
+from core.static.basic.filetype import GLOBAL
 import json
 import os
 from concurrent.futures import ThreadPoolExecutor
 import re
+from core.static.basic.modules import modules
 
 
 class strings:
 	
 	def __init__(self):
-		self.mal_strings = json.load(open(os.getcwd() + '/../../../json/strings.json','r'))
+		self.mal_strings = json.load(open(os.getcwd() + '/json/strings.json','r'))
 		self.file = "/home/srihari/Documents/projects/malspark/samples/Chapter_3L/Lab03-04.exe"
 		self.printable = set(string.printable)
 		self.data = open(self.file, 'rb').read()
@@ -18,6 +19,7 @@ class strings:
 		self.min_length = GLOBAL["static"]["basic"]["minimum_string_length"]
 
 	def advanced_strings(self):
+		strings = []
 		url_pattern = re.compile(r'(http[s]?://)?(www\.)[a-zA-Z0-9-_]+(\.[a-zA-Z0-9-_]+)+(:[0-9]+)?(/.*)*')
 		
 		ipv4_pattern = re.compile(r'\b(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b')
@@ -46,13 +48,19 @@ class strings:
 			ipv6_match = re.search(ipv6_regex, i)
 			email_match = email_pattern.search(i)
 			if match:
-				print(match.group())
+				self.collected.remove(i)
+				strings.append(match.group())
 			if ipv4_match:
-				print(ipv4_match.group())
+				self.collected.remove(i)
+				strings.append(ipv4_match.group())
 			if ipv6_match:
-				print(ipv6_match.group())
+				self.collected.remove(i)
+				strings.append(ipv6_match.group())
 			if email_match:
-				print(email_match.group())
+				self.collected.remove(i)
+				strings.append(email_match.group())
+
+		return strings
 
 	def extract_strings(self):
 		# print(self.data)
@@ -76,6 +84,8 @@ class strings:
 			else:
 				flag = 0
 				extracted_string = ""
+		self.collectable = self.collected
+		return self.collected
 
 	def pattern_category(self,type, words):
 		category_string = []
@@ -115,14 +125,44 @@ class strings:
 
 		for i in range(len(mal_types)):
 			pattern_list = self.pattern_category(mal_types[i], self.mal_strings[mal_types[i]][sub_type[i]])
-			patterns.append(pattern_list)
+			if len(pattern_list) != 1:
+				patterns.append(pattern_list)
 
-		# for i in mal_types:
-		# 	print(i)
-		print(patterns)
-		
+		return patterns
 
-obj = strings()
-obj.extract_strings()  
-obj.advanced_strings()
-obj.pattern_evalution()
+	def get_modules(self):
+		obj = modules(self.file)
+		imports = obj.get_imports()
+		exports = obj.get_exports()
+
+		imports_keys = list(imports.keys())
+		imports_values = list(imports.values())
+		extracted_imports = []
+		extracted_exports = []
+		for i in self.collectable:
+			flag = 0
+			for j in exports:
+				if i.strip().lower() == j.lower():
+					exported_exports.append(i)
+					flag = 1
+					
+			if flag==0:
+				for j in imports_keys:
+					if i.strip().lower() == j.lower():
+						extracted_imports.append(i)
+						flag = 1
+				if flag == 0:
+					for j in imports_values:
+						for k in j:
+							if i.strip().lower() == k.strip().lower():
+								extracted_imports.append(i)
+
+		self.collected = [ele for ele in self.collected if ele not in extracted_imports]
+		self.collected = [ele for ele in self.collected if ele not in extracted_exports]
+
+		return extracted_imports, extracted_exports, self.collected
+
+# obj = strings()
+# obj.extract_strings()  
+# obj.advanced_strings()
+# obj.pattern_evalution()
