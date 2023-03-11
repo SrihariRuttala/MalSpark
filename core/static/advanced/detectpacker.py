@@ -84,18 +84,7 @@ class packer:
 
             entropy = round(entropy/size, 5)
 
-        if entropy > self.min_entropy and entropy < self.max_entropy:
+        if entropy > self.min_entropy:
             packed = True
-        elif entropy > self.max_entropy:
-            encrypted = True
 
-        return entropy, packed, encrypted
-
-obj = packer('/home/srihari/Documents/projects/malspark/samples/upx_ADExplorer.exe')
-packers = obj.detect_yara_rules()
-print(list(packers))
-print(obj.min_imports_stats())
-print(obj.check_imports())
-print(obj.abnormal_section_names())
-print(obj.abnormal_entropy())
-obj.abnormal_section_size()
+        return entropy, packed
