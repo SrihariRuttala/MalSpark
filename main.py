@@ -10,6 +10,7 @@ from core.static.basic.modules import modules
 from core.static.basic.resources import resources
 from core.static.advanced.stack_obfuscated_strings import extract_strings
 from core.static.advanced.detectpacker import packer
+from core.static.advanced.virustotal import virustotal
 import threading
 
 
@@ -216,6 +217,22 @@ class print_output:
 		for i in self.packed:
 			print(i.strip())
 
+	def virustotal(self):
+		obj = virustotal()
+		print('\n\033[1m'  + '\033[33m' + '[+] Checking for internet connection... \033[0m')
+		connection = obj.check_connection()
+		if connection == True:
+			print(f'\n\033[1m{self.color.green}[+] Connection Secured')
+			print('\n\033[1m'  + '\033[33m' + '[+] ' + '\033[96m' + 'Getting Virus total results... \033[0m')
+			detections, total, threat_label = obj.search()
+			if detections == 0:
+				print(f'\n\033[1m{self.color.green}No security vendors flagged this file as malicious')
+			else:
+				print(f'{self.color.red}! Out of {total} vendors {detections} vendors flagged this file as malicious')
+				print(f'{self.color.red}Threat Label : {threat_label}')
+		else:
+			print(f'\n\033[1m{self.color.red}[-] Please check  your internet connection')
+
 if __name__ == '__main__':
 	obj = print_output()
 	obj.get_hashes()
@@ -226,3 +243,4 @@ if __name__ == '__main__':
 	obj.get_resources()
 	obj.deobfuscate()
 	obj.detect_packer()
+	obj.virustotal()

@@ -3,18 +3,17 @@ import json
 from html2image import Html2Image 
 import sys
 import socket
-
-sys.path.append('../../../')
-
 from core.static.basic.filetype import GLOBAL
 
 class virustotal:
 	def __init__(self):
-		self.hash = "84882c9d43e23d63b82004fae74ebb61"
+		self.hash = "625ac05fd47adc3c63700c3b30de79ab"
+		# self.hash = "28338b5d4883ceca83b28b5a9ebad94041d03167dd82283fe0ae6632ba02a2fd"
 		self.apikey = GLOBAL["static"]["advanced"]["vt_apikey"]
 
 	def search(self):
 		token_url = "https://www.virustotal.com/api/v3/widget/url?query=" + str(self.hash)
+		url = "https://www.virustotal.com/api/v3/files/" + str(self.hash)
 
 		header = {
 			"accept": "application/json",
@@ -24,13 +23,24 @@ class virustotal:
 
 		response = requests.get(token_url, headers=header)
 		json_response = json.loads(response.text)
-		token = json_response["data"]["url"].split("html/")[1]
+		detections = json_response['data']['detection_ratio']['detections']
+		total = json_response['data']['detection_ratio']['total']
 
-		widget_url = "https://www.virustotal.com/ui/widget/html/" + str(token)
-		response = requests.get(widget_url, headers=header)
+		lable_response = requests.get(url, headers=header)
+		json_response = json.loads(lable_response.text)
+		try:
+			threat_label = json_response['data']['attributes']['popular_threat_classification']['suggested_threat_label']
+		except KeyError:
+			threat_label = "None"
+		return detections, total, threat_label
 
-		hti = Html2Image()
-		hti.screenshot(html_str=response.text, save_as='virustotal.png')
+		# token = json_response["data"]["url"].split("html/")[1]
+
+		# widget_url = "https://www.virustotal.com/ui/widget/html/" + str(token)
+		# response = requests.get(widget_url, headers=header)
+
+		# hti = Html2Image()
+		# hti.screenshot(html_str=response.text, save_as='virustotal.png')
 
 	def check_connection(self):
 		try:
@@ -43,9 +53,3 @@ class virustotal:
 		return False
 
 
-obj = virustotal()
-if (obj.check_connection()):
-	print("Connected")
-	obj.search()
-else:
-	print("Not Connected")
