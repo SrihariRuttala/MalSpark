@@ -6,8 +6,8 @@ import socket
 from core.static.basic.filetype import GLOBAL
 
 class virustotal:
-	def __init__(self):
-		self.hash = "625ac05fd47adc3c63700c3b30de79ab"
+	def __init__(self, hash):
+		self.hash = hash
 		# self.hash = "28338b5d4883ceca83b28b5a9ebad94041d03167dd82283fe0ae6632ba02a2fd"
 		self.apikey = GLOBAL["static"]["advanced"]["vt_apikey"]
 

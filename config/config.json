@@ -1,7 +1,8 @@
 {
     "paths" :{
         "samples": "/home/srihari/Documents/projects/malspark/samples/Chapter_3L/",
-        "yara_rules": "/home/srihari/Documents/projects/malspark/yara/packers.yara"
+        "yara_rules": "/home/srihari/Documents/projects/malspark/yara/packers.yara",
+        "strings_json": "./json/strings.json"
     },
 
     "static" :{
@@ -9,7 +10,7 @@
             "minimum_string_length": 4
         },
         "advanced":{
-            "vt_apikey": "",
+            "vt_apikey": "fcefe4cd440f83514a96c211775c7d6d32b05ca50f401982ea43e7bf2de81874",
             "imports_threshold": 10,
             "min_entropy": 6.677, 
             "max_entropy": 7.199

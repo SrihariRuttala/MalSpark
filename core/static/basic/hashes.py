@@ -6,8 +6,8 @@ import pyimpfuzzy
 
 class hashes:
     
-    def __init__(self):
-        self.file = "/home/srihari/Documents/projects/malspark/samples/Chapter_3L/Lab03-03.exe"
+    def __init__(self, filepath):
+        self.file = filepath
         self.file_read = open(self.file,'rb').read()
         
     def get_md5(self):
@@ -38,5 +38,3 @@ class hashes:
     def get_impfuzzy(self):
         impfuzzy_hash = pyimpfuzzy.get_impfuzzy(self.file)
         return impfuzzy_hash
-
-    

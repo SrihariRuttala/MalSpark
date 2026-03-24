@@ -8,14 +8,14 @@ global GLOBAL
 GLOBAL = json.load(open(os.getcwd() + '/config/config.json','r'))
 
 class filetype:
-    def __init__(self):
-        self.file_path = '/home/srihari/Documents/projects/malware_stats/packed/yoda-crypter_ADExplorer.exe'
-        self.pe = pefile.PE('/home/srihari/Documents/projects/malware_stats/packed/yoda-crypter_ADExplorer.exe')
+    def __init__(self, filepath):
+        self.file_path = filepath
+        self.pe = pefile.PE(filepath)
 
     def detect_filetype(self):
         files = os.listdir(GLOBAL["paths"]["samples"])
         file = files[0]
-        type_string = magic.from_file("/home/srihari/Documents/projects/malspark/samples/Chapter_3L/"+file)
+        type_string = magic.from_file(self.file_path)
         type_string = type_string.split(" ")
         if type_string[0] == "PE32":
             if type_string[2] == "(console)":

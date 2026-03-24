@@ -66,7 +66,6 @@ class packer:
                 
     def abnormal_entropy(self):
 
-        # byte = [0 for i in range(256)]
         byte = [0] * 256
         packed = False
         encrypted = False
@@ -88,12 +87,4 @@ class packer:
             packed = True
 
         return entropy, packed
-
-# obj = packer('/home/srihari/Documents/projects/malspark/samples/upx_ADExplorer.exe')
-# packers = obj.detect_yara_rules()
-# print(list(packers))
-# print(obj.min_imports_stats())
-# print(obj.check_imports())
-# print(obj.abnormal_section_names())
-# print(obj.abnormal_entropy())
-# obj.abnormal_section_size()
+        

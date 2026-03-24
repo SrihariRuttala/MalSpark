@@ -9,9 +9,10 @@ from core.static.basic.modules import modules
 
 class strings:
 	
-	def __init__(self):
-		self.mal_strings = json.load(open(os.getcwd() + '/json/strings.json','r'))
-		self.file = "/home/srihari/Documents/projects/malspark/samples/Chapter_3L/Lab03-04.exe"
+	def __init__(self, filepath):
+		# self.mal_strings = json.load(open(os.getcwd() + '/json/strings.json','r'))
+		self.mal_strings = json.load(open(GLOBAL['paths']['strings_json'], 'r'))
+		self.file = filepath
 		self.printable = set(string.printable)
 		self.data = open(self.file, 'rb').read()
 		self.collected = []
@@ -24,7 +25,7 @@ class strings:
 		
 		ipv4_pattern = re.compile(r'\b(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b')
 		
-		ipv6_regex = '''(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|
+		ipv6_regex = r'''(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|
         ([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:)
         {1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1
         ,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}
@@ -50,13 +51,13 @@ class strings:
 			if match:
 				self.collected.remove(i)
 				strings.append(match.group())
-			if ipv4_match:
+			elif ipv4_match:
 				self.collected.remove(i)
 				strings.append(ipv4_match.group())
-			if ipv6_match:
+			elif ipv6_match:
 				self.collected.remove(i)
 				strings.append(ipv6_match.group())
-			if email_match:
+			elif email_match:
 				self.collected.remove(i)
 				strings.append(email_match.group())
 
@@ -161,8 +162,3 @@ class strings:
 		self.collected = [ele for ele in self.collected if ele not in extracted_exports]
 
 		return extracted_imports, extracted_exports, self.collected
-
-# obj = strings()
-# obj.extract_strings()  
-# obj.advanced_strings()
-# obj.pattern_evalution()

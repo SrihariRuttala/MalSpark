@@ -38,4 +38,3 @@ else:
     for resource_name in resources_names:
         print(resource_name)
 
-# test("/home/srihari/Documents/projects/malspark/samples/upx_ADExplorer.exe")
